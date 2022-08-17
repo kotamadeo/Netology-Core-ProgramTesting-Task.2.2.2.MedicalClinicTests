@@ -17,8 +17,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.*;
 
 class MedicalServiceImplTest {
     private static PatientInfo patientInfo;
@@ -39,13 +38,13 @@ class MedicalServiceImplTest {
     void testCheckBloodPressureNotNormal() {
         BloodPressure currentPressure = new BloodPressure(60, 120);
         String message = String.format("Warning, patient with id: %s, need help", info.getId());
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoFileRepository.class);
-        Mockito.when(patientInfoRepository.getById(info.getId())).thenReturn(info);
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-        Mockito.doNothing().when(alertService).send(message);
+        PatientInfoRepository patientInfoRepository = mock(PatientInfoFileRepository.class);
+        when(patientInfoRepository.getById(info.getId())).thenReturn(info);
+        SendAlertService alertService = mock(SendAlertService.class);
+        doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkBloodPressure(info.getId(), currentPressure);
-        Mockito.verify(alertService, only()).send(message);
+        verify(alertService, only()).send(message);
         assertNotEquals(patientInfo.getHealthInfo().getBloodPressure(), currentPressure);
     }
 
@@ -53,13 +52,13 @@ class MedicalServiceImplTest {
     void testCheckBloodPressureNormal() {
         BloodPressure currentPressure = new BloodPressure(120, 80);
         String message = String.format("Warning, patient with id: %s, need help", info.getId());
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoFileRepository.class);
-        Mockito.when(patientInfoRepository.getById(info.getId())).thenReturn(info);
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-        Mockito.doNothing().when(alertService).send(message);
+        PatientInfoRepository patientInfoRepository = mock(PatientInfoFileRepository.class);
+        when(patientInfoRepository.getById(info.getId())).thenReturn(info);
+        SendAlertService alertService = mock(SendAlertService.class);
+        doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkBloodPressure(info.getId(), currentPressure);
-        Mockito.verify(alertService, never()).send(message);
+        verify(alertService, never()).send(message);
         assertEquals(patientInfo.getHealthInfo().getBloodPressure(), currentPressure);
     }
 
@@ -67,13 +66,13 @@ class MedicalServiceImplTest {
     void testCheckTemperatureNotNormal() {
         BigDecimal currentTemperature = new BigDecimal("34.9");
         String message = String.format("Warning, patient with id: %s, need help", info.getId());
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoFileRepository.class);
-        Mockito.when(patientInfoRepository.getById(info.getId())).thenReturn(info);
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-        Mockito.doNothing().when(alertService).send(message);
+        PatientInfoRepository patientInfoRepository = mock(PatientInfoFileRepository.class);
+        when(patientInfoRepository.getById(info.getId())).thenReturn(info);
+        SendAlertService alertService = mock(SendAlertService.class);
+        doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkTemperature(info.getId(), currentTemperature);
-        Mockito.verify(alertService, only()).send(message);
+        verify(alertService, only()).send(message);
         assertTrue(patientInfo.getHealthInfo()
                 .getNormalTemperature()
                 .subtract(new BigDecimal("1.5"))
@@ -84,13 +83,13 @@ class MedicalServiceImplTest {
     void testCheckTemperatureNormal() {
         BigDecimal currentTemperature = new BigDecimal("36.6");
         String message = String.format("Warning, patient with id: %s, need help", info.getId());
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoFileRepository.class);
-        Mockito.when(patientInfoRepository.getById(info.getId())).thenReturn(info);
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-        Mockito.doNothing().when(alertService).send(message);
+        PatientInfoRepository patientInfoRepository = mock(PatientInfoFileRepository.class);
+        when(patientInfoRepository.getById(info.getId())).thenReturn(info);
+        SendAlertService alertService = mock(SendAlertService.class);
+        doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkTemperature(info.getId(), currentTemperature);
-        Mockito.verify(alertService, never()).send(message);
+        verify(alertService, never()).send(message);
         assertFalse(patientInfo.getHealthInfo()
                 .getNormalTemperature()
                 .subtract(new BigDecimal("1.5"))

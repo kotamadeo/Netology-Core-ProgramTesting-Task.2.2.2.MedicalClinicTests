@@ -12,30 +12,32 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class PatientInfoFileRepositoryTest {
     private static PatientInfoFileRepository patientInfoFileRepository;
 
     @BeforeAll
     public static void initSuite() {
-        patientInfoFileRepository = Mockito.mock(PatientInfoFileRepository.class);
-        Mockito.when(patientInfoFileRepository.getById(any())).thenReturn(new PatientInfo("1", "Ivan", "Ivanov",
+        patientInfoFileRepository = mock(PatientInfoFileRepository.class);
+        when(patientInfoFileRepository.getById(any())).thenReturn(new PatientInfo("1", "Ivan", "Ivanov",
                 LocalDate.of(1980, 12, 21), new HealthInfo(new BigDecimal("36.6"),
                         new BloodPressure(140, 90))));
     }
 
     @AfterAll
     public static void completeSuite() {
-        System.out.println("All tests complete!");
+        System.out.println("Все тесты пройдены!");
     }
 
     @Test
-    @DisplayName("Test for method 'getById()' ")
+    @DisplayName("Test for method 'getById()'")
     void getByIdTest(TestInfo getByIdTestInfo) {
         PatientInfo patientInfo = new PatientInfo("1", "Ivan", "Ivanov", LocalDate.of(1980, 12, 21),
                 new HealthInfo(new BigDecimal("36.6"), new BloodPressure(140, 90)));
         assertEquals(patientInfo, patientInfoFileRepository.getById("1"),
-                getByIdTestInfo.getDisplayName() + " is NO complete!");
-        System.out.println(getByIdTestInfo.getDisplayName() + " complete!");
+                getByIdTestInfo.getDisplayName() + " упал!");
+        System.out.println(getByIdTestInfo.getDisplayName() + " завершен!");
     }
 }
