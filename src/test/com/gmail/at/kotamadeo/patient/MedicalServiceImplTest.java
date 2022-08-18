@@ -10,7 +10,6 @@ import com.gmail.at.kotamadeo.patient.service.medical.MedicalService;
 import com.gmail.at.kotamadeo.patient.service.medical.MedicalServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,8 +43,9 @@ class MedicalServiceImplTest {
         doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkBloodPressure(info.getId(), currentPressure);
-        verify(alertService, only()).send(message);
         assertNotEquals(patientInfo.getHealthInfo().getBloodPressure(), currentPressure);
+        verify(alertService, only()).send(message);
+        verifyNoInteractions();
     }
 
     @Test
@@ -58,8 +58,9 @@ class MedicalServiceImplTest {
         doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkBloodPressure(info.getId(), currentPressure);
-        verify(alertService, never()).send(message);
         assertEquals(patientInfo.getHealthInfo().getBloodPressure(), currentPressure);
+        verify(alertService, never()).send(message);
+
     }
 
     @Test
@@ -72,11 +73,12 @@ class MedicalServiceImplTest {
         doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkTemperature(info.getId(), currentTemperature);
-        verify(alertService, only()).send(message);
         assertTrue(patientInfo.getHealthInfo()
                 .getNormalTemperature()
                 .subtract(new BigDecimal("1.5"))
                 .compareTo(currentTemperature) > 0);
+        verify(alertService, only()).send(message);
+        verifyNoInteractions();
     }
 
     @Test
@@ -89,10 +91,11 @@ class MedicalServiceImplTest {
         doNothing().when(alertService).send(message);
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkTemperature(info.getId(), currentTemperature);
-        verify(alertService, never()).send(message);
         assertFalse(patientInfo.getHealthInfo()
                 .getNormalTemperature()
                 .subtract(new BigDecimal("1.5"))
                 .compareTo(currentTemperature) > 0);
+        verify(alertService, never()).send(message);
+        verifyNoInteractions();
     }
 }

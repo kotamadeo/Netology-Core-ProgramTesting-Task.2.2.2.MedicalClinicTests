@@ -5,8 +5,7 @@ import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class SendAlertServiceImplTest {
     private static SendAlertServiceImpl sendAlertServiceImpl;
@@ -26,9 +25,10 @@ class SendAlertServiceImplTest {
     void sendTest(TestInfo sendTestInfo) {
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class); // перехват аргументов
         sendAlertServiceImpl.send("Test"); // запускаем метод со значением "Test"
-        verify(sendAlertServiceImpl).send(argumentCaptor.capture()); // перехват
         assertEquals("Test", argumentCaptor.getValue(),
                 sendTestInfo.getDisplayName() + " упал!"); // сравниваем ожидаемое значение и перехват
         System.out.println(sendTestInfo.getDisplayName() + " завершен!");
+        verify(sendAlertServiceImpl).send(argumentCaptor.capture()); // перехват
+        verifyNoInteractions();
     }
 }
